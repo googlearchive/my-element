@@ -1,0 +1,86 @@
+<!--
+`my-element`
+My first web component
+
+@demo demo/index.html
+-->
+<template id="my-element">
+  <style>
+     :host {
+      display: block;
+    }
+  </style>
+  <h2>Hello <span id="prop1"></span>!</h2>
+</template>
+
+<script>
+  (() => {
+    'use strict';
+
+    // Retrieve template from current script's document owner.
+    const doc = document.currentScript.ownerDocument;
+    const template = doc.querySelector('template#my-element');
+    
+    class MyElement extends HTMLElement {
+
+      static get observedAttributes() {
+        return ['prop1'];
+      }
+
+      attributeChangedCallback(name, old, value) {
+        if (old !== value) {
+          this[name] = value;
+        }
+      }
+
+      constructor() {
+        super();
+
+        /**
+         * @type {!Object}
+         * @private
+         */
+        this._properties = {
+          prop1: 'my-element',
+        };
+      }
+
+      /** 
+       * @property {string|null} prop1
+       */
+      get prop1() {
+        return this._properties.prop1;
+      }
+
+      set prop1(val) {
+        if (val !== this.prop1) {
+          this._properties.prop1 = val;
+          this._updateRendering();
+        }
+        return this.prop1;
+      }
+
+      connectedCallback() {
+        // Lazy creation of shadowRoot.
+        if (!this.shadowRoot) {
+          this.attachShadow({
+            mode: 'open'
+          }).appendChild(document.importNode(template.content, true));
+        }
+        this._updateRendering();
+      }
+
+      /**
+       * @private
+       */
+      _updateRendering() {
+        // Avoid rendering when not connected.
+        if (this.shadowRoot && this.isConnected) {
+          this.shadowRoot.querySelector('#prop1').textContent = this.prop1;
+        }
+      }
+    }
+
+    customElements.define('my-element', MyElement);
+  })();
+</script>
