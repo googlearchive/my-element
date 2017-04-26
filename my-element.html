@@ -20,7 +20,7 @@ My first web component
     // Retrieve template from current script's document owner.
     const doc = document.currentScript.ownerDocument;
     const template = doc.querySelector('template#my-element');
-    
+
     class MyElement extends HTMLElement {
 
       static get observedAttributes() {
@@ -41,20 +41,44 @@ My first web component
          * @private
          */
         this._properties = {
-          prop1: 'my-element',
+          current: null,
+          previous: null,
+          difference: null,
         };
       }
 
       /** 
-       * @property {string|null} prop1
+       * @property {number|null} current
        */
-      get prop1() {
-        return this._properties.prop1;
+      get current() {
+        return this._properties.current;
       }
 
-      set prop1(val) {
-        if (val !== this.prop1) {
-          this._properties.prop1 = val;
+      /** 
+       * @property {number|null} previous
+       */
+      get previous() {
+        return this._properties.previous;
+      }
+
+      /** 
+       * @property {number|null} difference
+       * @readonly
+       */
+      get difference() {
+        return this._properties.difference;
+      }
+
+      set current(val) {
+        if (val !== this.current) {
+          this._properties.current = val;
+          this._updateRendering();
+        }
+      }
+
+      set previous(val) {
+        if (val !== this.previous) {
+          this._properties.previous = val;
           this._updateRendering();
         }
       }
