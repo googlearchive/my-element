@@ -10,7 +10,7 @@ My first web component
       display: block;
     }
   </style>
-  <h2>Hello <span id="prop1"></span>!</h2>
+  <h2></h2>
 </template>
 
 <script>
@@ -121,8 +121,20 @@ My first web component
       _updateRendering() {
         // Avoid rendering when not connected.
         if (this.shadowRoot && this.isConnected) {
-          this.shadowRoot.querySelector('#prop1').textContent = this.prop1;
+          const h2 = this.shadowRoot.querySelector('h2');
+          h2.textContent = this._computeSymbol(this.difference);
         }
+      }
+
+      /**
+       * @param {number|null} difference
+       * @return {string}
+       * @private
+       */
+      _computeSymbol(difference) {
+        return difference === null ? '' :
+          difference === 0 ? '👀' :
+          difference > 0 ? '📈' : '📉';
       }
     }
 
