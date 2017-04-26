@@ -21,7 +21,7 @@
 
     <test-fixture id="ChangedPropertyTestFixture">
       <template>
-        <my-element prop1="new-prop1"></my-element>
+        <my-element current="10" previous="0"></my-element>
       </template>
     </test-fixture>
 
@@ -30,18 +30,22 @@
 
         test('instantiating the element with default properties works', function() {
           var element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'my-element');
+          assert.equal(element.current, null);
+          assert.equal(element.previous, null);
+          assert.equal(element.difference, null);
           var elementShadowRoot = element.shadowRoot;
           var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.textContent, 'Hello my-element!');
+          assert.equal(elementHeader.textContent, '');
         });
 
         test('setting a property on the element works', function() {
           var element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
+          assert.equal(element.current, 10);
+          assert.equal(element.previous, 0);
+          assert.equal(element.difference, 10);
           var elementShadowRoot = element.shadowRoot;
           var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.textContent, 'Hello new-prop1!');
+          assert.equal(elementHeader.textContent, '📈');
         });
 
       });
