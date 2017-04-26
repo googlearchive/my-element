@@ -24,12 +24,13 @@ My first web component
     class MyElement extends HTMLElement {
 
       static get observedAttributes() {
-        return ['prop1'];
+        return ['current', 'previous'];
       }
 
       attributeChangedCallback(name, old, value) {
         if (old !== value) {
-          this[name] = value;
+          // Normalize strings to numbers.
+          this[name] = Number(value);
         }
       }
 
