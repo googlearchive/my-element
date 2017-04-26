@@ -23,7 +23,13 @@
     <h3>Basic my-element demo</h3>
     <demo-snippet>
       <template>
-        <my-element></my-element>
+        <h1>My stock</h1>
+        <p>Was 5, now is 10</p>
+        <my-element current="10" previous="5"></my-element>
+        <p>Was 10, now is 5</p>
+        <my-element current="5" previous="10"></my-element>
+        <p>Was 2, now is 2</p>
+        <my-element current="2" previous="2"></my-element>
       </template>
     </demo-snippet>
   </div>
