@@ -70,17 +70,38 @@ My first web component
       }
 
       set current(val) {
+        val = Number.isFinite(val) ? val : null;
         if (val !== this.current) {
           this._properties.current = val;
+          this._updateDifference();
           this._updateRendering();
         }
       }
 
       set previous(val) {
+        val = Number.isFinite(val) ? val : null;
         if (val !== this.previous) {
           this._properties.previous = val;
+          this._updateDifference();
           this._updateRendering();
         }
+      }
+
+      /**
+       * @private
+       */
+      _updateDifference() {
+        this._properties.difference = this._computeDifference(this.current, this.previous);
+      }
+
+      /**
+       * @param {number|null} current
+       * @param {number|null} previous
+       * @return {number|null}
+       * @private
+       */
+      _computeDifference(current, previous) {
+        return (current === null || previous === null) ? null : current - previous;
       }
 
       connectedCallback() {
