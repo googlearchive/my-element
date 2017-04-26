@@ -1,6 +1,6 @@
 {
   "name": "my-element",
-  "description": "My first web component",
+  "description": "Given a current and previous value, it computes the difference and renders a symbol.",
   "main": "my-element.html",
   "version": "0.0.1",
   "license": "MIT",
