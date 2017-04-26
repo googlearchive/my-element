@@ -1,6 +1,6 @@
 # \<my-element\>
 
-My first web component
+Given a current and previous value, it computes the difference and renders a symbol.
 
 <!-- 
   The next comment block is used by webcomponents.org to enable inline demo.
@@ -18,7 +18,7 @@ My first web component
 ```
 -->
 ```html
-<my-element></my-element>
+<my-element current="10" previous="0"></my-element>
 ```
 
 ## Install the Polymer-CLI
