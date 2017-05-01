@@ -1,100 +1,61 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
 <!--
 `my-element`
 Given a current and previous value, it computes the difference and renders a symbol.
 
 @demo demo/index.html
 -->
-<template id="my-element">
-  <style>
-     :host {
-      display: block;
-    }
-  </style>
-  <h2></h2>
-</template>
+
+<dom-module id="my-element">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+    </style>
+    <h2>[[_computeSymbol(difference)]]</h2>
+  </template>
+</dom-module>
 
 <script>
   (() => {
     'use strict';
 
-    // Retrieve template from current script's document owner.
-    const doc = document.currentScript.ownerDocument;
-    const template = doc.querySelector('template#my-element');
+    class MyElement extends Polymer.Element {
 
-    class MyElement extends HTMLElement {
-
-      static get observedAttributes() {
-        return ['current', 'previous'];
+      static get is() {
+        return 'my-element';
       }
 
-      attributeChangedCallback(name, old, value) {
-        if (old !== value) {
-          // Normalize strings to numbers.
-          this[name] = Number(value);
-        }
-      }
+      static get properties() {
+        return {
 
-      constructor() {
-        super();
+          /** 
+           * @property {number|null} current
+           */
+          current: {
+            type: Number,
+            value: null
+          },
 
-        /**
-         * @type {!Object}
-         * @private
-         */
-        this._properties = {
-          current: null,
-          previous: null,
-          difference: null,
+          /** 
+           * @property {number|null} previous
+           */
+          previous: {
+            type: Number,
+            value: null
+          },
+
+          /** 
+           * @property {number|null} difference
+           * @readonly
+           */
+          difference: {
+            type: Number,
+            computed: '_computeDifference(current, previous)'
+          }
         };
-      }
-
-      /** 
-       * @property {number|null} current
-       */
-      get current() {
-        return this._properties.current;
-      }
-
-      /** 
-       * @property {number|null} previous
-       */
-      get previous() {
-        return this._properties.previous;
-      }
-
-      /** 
-       * @property {number|null} difference
-       * @readonly
-       */
-      get difference() {
-        return this._properties.difference;
-      }
-
-      set current(val) {
-        val = Number.isFinite(val) ? val : null;
-        if (val !== this.current) {
-          this._properties.current = val;
-          this._updateDifference();
-          this._updateRendering();
-        }
-        return this.current;
-      }
-
-      set previous(val) {
-        val = Number.isFinite(val) ? val : null;
-        if (val !== this.previous) {
-          this._properties.previous = val;
-          this._updateDifference();
-          this._updateRendering();
-        }
-        return this.previous;
-      }
-
-      /**
-       * @private
-       */
-      _updateDifference() {
-        this._properties.difference = this._computeDifference(this.current, this.previous);
       }
 
       /**
@@ -105,27 +66,6 @@ Given a current and previous value, it computes the difference and renders a sym
        */
       _computeDifference(current, previous) {
         return (current === null || previous === null) ? null : current - previous;
-      }
-
-      connectedCallback() {
-        // Lazy creation of shadowRoot.
-        if (!this.shadowRoot) {
-          this.attachShadow({
-            mode: 'open'
-          }).appendChild(document.importNode(template.content, true));
-        }
-        this._updateRendering();
-      }
-
-      /**
-       * @private
-       */
-      _updateRendering() {
-        // Avoid rendering when not connected.
-        if (this.shadowRoot && this.isConnected) {
-          const h2 = this.shadowRoot.querySelector('h2');
-          h2.textContent = this._computeSymbol(this.difference);
-        }
       }
 
       /**
@@ -140,6 +80,6 @@ Given a current and previous value, it computes the difference and renders a sym
       }
     }
 
-    customElements.define('my-element', MyElement);
+    customElements.define(MyElement.is, MyElement);
   })();
 </script>
